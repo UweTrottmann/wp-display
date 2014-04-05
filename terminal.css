@@ -1,8 +1,7 @@
 @font-face {
-  font-family: 'Inconsolata';
+  font-family: monospace;
   font-style: normal;
   font-weight: normal;
-  src: local('Inconsolata'), url('Inconsolata.woff') format('woff');
 }
 
 /*@-webkit-keyframes pulse {
