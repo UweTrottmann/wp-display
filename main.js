@@ -1,3 +1,5 @@
+var tcpClient;
+
 /**
  * Shows and hides the help panel
  */
@@ -26,22 +28,29 @@ function toggleHelp() {
   // Make an ANSI Color converter.
   var ansiConv = new AnsiConverter();
 
-  // Connect to aardmud by default.
-  var host = 'aardmud.org';
-  var port = 4000;
-  connect(host, port);
+  // Connect to WP by default.
+  var host = 'waermepumpe';
+  var port = 8888;
+  // connect(host, port);
 
-  // Bind the connect dialog to real stuff.
-  var button = document.getElementById('connect');
-  button.addEventListener('click', function() {
+  // connect button
+  var connectButton = document.getElementById('connect');
+  connectButton.addEventListener('click', function() {
 
     // Disconnect from previous socket.
     var host = document.getElementById('host').value;
     var port = parseInt(document.getElementById('port').value, 10);
-    tcpClient.disconnect();
+    disconnect();
     connect(host, port);
     toggleHelp();
 
+  });
+
+  // disconnect button
+  var disconnectButton = document.getElementById('disconnect');
+  disconnectButton.addEventListener('click', function() {
+    disconnect();
+    toggleHelp();
   });
 
   /**
@@ -64,6 +73,12 @@ function toggleHelp() {
         term.output(output);
       });
     });
+  }
+
+  function disconnect() {
+    if (tcpClient) {
+      tcpClient.disconnect();
+    }
   }
 
 })();
