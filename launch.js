@@ -13,3 +13,10 @@ chrome.app.runtime.onLaunched.addListener(function() {
     }
   });
 });
+
+chrome.runtime.onSuspend.addListener(function() {
+  // Do some simple clean-up tasks.
+  if (window.tcpClient) {
+    tcpClient.disconnect();
+  }
+});
