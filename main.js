@@ -1,3 +1,5 @@
+var REQUEST_STATUS = 3004;
+
 var tcpClient;
 
 /**
@@ -51,6 +53,14 @@ function toggleHelp() {
   disconnectButton.addEventListener('click', function() {
     disconnect();
     toggleHelp();
+  });
+
+  // request status button
+  var requestStatusButton = document.getElementById('requestStatus');
+  requestStatusButton.addEventListener('click', function() {
+    if (tcpClient) {
+      tcpClient.sendInteger(REQUEST_STATUS);
+    }
   });
 
   /**

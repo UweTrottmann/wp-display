@@ -76,6 +76,24 @@ Author: Boris Smus (smus@chromium.org)
   };
 
   /**
+   * Sends a message down the wire to the remote side
+   *
+   * @see http://developer.chrome.com/apps/socket.html#method-write
+   * @param {String} value The 32-bit integer value to send
+   * @param {Function} callback The function to call when the message has sent
+   */
+  TcpClient.prototype.sendInteger = function(value, callback) {
+    // Register sent callback.
+    this.callbacks.sent = callback;
+
+    var buffer = new ArrayBuffer(8);
+    var dataView = new DataView(buffer);
+    dataView.setInt32(0, value);
+    socket.write(this.socketId, buffer, this._onWriteComplete.bind(this));
+    log('Sent integer: ' + dataView.getInt32(0).toString());
+  };
+
+  /**
    * Sets the callback for when a message is received
    *
    * @param {Function} callback The function to call when a message has arrived
