@@ -14,3 +14,11 @@ $RECYCLE.BIN/
 
 # Mac crap
 .DS_Store
+
+#############
+## IntelliJ
+#############
+*.iml
+*.ipr
+*.iws
+.idea/
