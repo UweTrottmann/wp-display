@@ -80,13 +80,14 @@ function toggleHelp() {
         var lines = formattedData.split('\n');
         // Render response in the terminal.
         var output = lines.join('<br/>');
-        term.output(output);
+        term.output(output + '<br/>');
       });
     });
   }
 
   function disconnect() {
     if (tcpClient) {
+      term.output('Disconnected.');
       tcpClient.disconnect();
     }
   }
