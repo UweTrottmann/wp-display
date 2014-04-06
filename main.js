@@ -69,7 +69,7 @@ function toggleHelp() {
   // Connect to WP by default.
   var host = 'waermepumpe';
   var port = 8888;
-  // connect(host, port);
+  connect(host, port);
 
   // connect button
   var connectButton = document.getElementById('connect');
