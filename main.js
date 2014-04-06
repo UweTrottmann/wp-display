@@ -28,7 +28,7 @@ var INDEX_TEMP_OUTDOORS = 15;
 /** @const */
 var INDEX_HEIZUNG_RUECKLAUF_MEHR = 74;
 /** @const */
-var INDEX_HEIZUNG_RUECKLAUF_WENIGER = 74;
+var INDEX_HEIZUNG_RUECKLAUF_WENIGER = 75;
 
 /**
  * Temperature unit.
@@ -46,14 +46,14 @@ function toggleHelp() {
   document.body.classList.toggle('dim');
 }
 
-(function() {
+(function () {
 
   // Create and init the terminal
   var term = new Terminal('container');
   term.initFS(false, 1024 * 1024);
 
   // Capture key presses
-  document.body.addEventListener('keydown', function(e) {
+  document.body.addEventListener('keydown', function (e) {
     if (e.keyCode == 27) { // Esc
       toggleHelp();
       e.stopPropagation();
@@ -73,7 +73,7 @@ function toggleHelp() {
 
   // connect button
   var connectButton = document.getElementById('connect');
-  connectButton.addEventListener('click', function() {
+  connectButton.addEventListener('click', function () {
 
     // Disconnect from previous socket.
     var host = document.getElementById('host').value;
@@ -86,14 +86,14 @@ function toggleHelp() {
 
   // disconnect button
   var disconnectButton = document.getElementById('disconnect');
-  disconnectButton.addEventListener('click', function() {
+  disconnectButton.addEventListener('click', function () {
     disconnect();
     toggleHelp();
   });
 
   // request status button
   var requestStatusButton = document.getElementById('requestStatus');
-  requestStatusButton.addEventListener('click', function() {
+  requestStatusButton.addEventListener('click', function () {
     if (tcpClient) {
       tcpClient.sendInteger(REQUEST_STATUS);
     }
@@ -107,9 +107,9 @@ function toggleHelp() {
    */
   function connect(host, port) {
     tcpClient = new TcpClient(host, port);
-    tcpClient.connect(function() {
+    tcpClient.connect(function () {
       term.output('Connected to ' + host + ':' + port + '<br/>');
-      tcpClient.addResponseListener(function(data) {
+      tcpClient.addResponseListener(function (data) {
         if (data[0] != REQUEST_STATUS) {
           console.error('Invalid response: was no status package');
           return;
@@ -121,6 +121,8 @@ function toggleHelp() {
         output += getValue(data, INDEX_TEMP_RUECKLAUF) + '<br/>';
         output += getValue(data, INDEX_TEMP_RUECKLAUF_SOLL) + '<br/>';
         output += getValue(data, INDEX_TEMP_OUTDOORS) + '<br/>';
+        output += getValue(data, INDEX_HEIZUNG_RUECKLAUF_MEHR) + '<br/>';
+        output += getValue(data, INDEX_HEIZUNG_RUECKLAUF_WENIGER) + '<br/>';
         term.output(output + '<br/>');
       });
     });
@@ -132,14 +134,17 @@ function toggleHelp() {
       case INDEX_TEMP_RUECKLAUF:
       case INDEX_TEMP_RUECKLAUF_SOLL:
       case INDEX_TEMP_OUTDOORS:
-       return getTemperatureValue(array, index);
+        return getTemperatureValue(array, index);
+      case INDEX_HEIZUNG_RUECKLAUF_MEHR:
+      case INDEX_HEIZUNG_RUECKLAUF_WENIGER:
+        return getTimeValue(array, index);
     }
     return 'n/a';
   }
 
   function getTemperatureValue(array, index) {
     var label = 'Unknown';
-    switch(index) {
+    switch (index) {
       case INDEX_TEMP_VORLAUF:
         label = 'Temp. Vorlauf';
         break;
@@ -155,6 +160,22 @@ function toggleHelp() {
     }
     // offset by 3 (exclude request code, status code and length field)
     return label + ': ' + (array[index + 3] / 10) + ' ' + UNIT_TEMPERATURE_CELSIUS;
+  }
+
+  function getTimeValue(array, index) {
+    var label = 'Unknown';
+    switch (index) {
+      case INDEX_HEIZUNG_RUECKLAUF_MEHR:
+        label = 'T Rücklauf < (T Rücklauf Soll - Hysterese)';
+        break;
+      case INDEX_HEIZUNG_RUECKLAUF_WENIGER:
+        label = 'T Rücklauf > (T Rücklauf Soll - Hysterese)';
+        break;
+    }
+    var seconds = array[index + 3];
+    var minutes = (seconds - (seconds % 60)) / 60;
+    // offset by 3 (exclude request code, status code and length field)
+    return label + ': ' + minutes + ' min ' + (seconds % 60) + ' sec';
   }
 
   function disconnect() {
