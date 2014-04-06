@@ -111,12 +111,15 @@ function toggleHelp() {
       term.output('Connected to ' + host + ':' + port + '<br/>');
       tcpClient.addResponseListener(function (data) {
         if (data[0] != REQUEST_STATUS) {
-          console.error('Invalid response: was no status package');
+          term.output('Invalid response: request code does not match');
           return;
         }
 
         // extract some values
         var output = '';
+        var currentTime = new Date();
+        output += currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
+        output += '<br/>';
         output += getValue(data, INDEX_TEMP_VORLAUF) + '<br/>';
         output += getValue(data, INDEX_TEMP_RUECKLAUF) + '<br/>';
         output += getValue(data, INDEX_TEMP_RUECKLAUF_SOLL) + '<br/>';
