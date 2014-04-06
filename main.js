@@ -1,5 +1,41 @@
 var REQUEST_STATUS = 3004;
 
+/**
+ * Temperatur Vorlauf, Faktor 10, Celsius.
+ * @const
+ * @type {number}
+ */
+var INDEX_TEMP_VORLAUF = 10;
+/**
+ * Temperatur Rücklauf, Faktor 10, Celsius.
+ * @const
+ * @type {number}
+ */
+var INDEX_TEMP_RUECKLAUF = 11;
+/**
+ * Temperatur Rücklauf Soll, Faktor 10, Celsius.
+ * @const
+ * @type {number}
+ */
+var INDEX_TEMP_RUECKLAUF_SOLL = 12;
+/**
+ * Aussentemperatur, Faktor 10, Celsius.
+ * @const
+ * @type {number}
+ */
+var INDEX_TEMP_OUTDOORS = 15;
+
+/** @const */
+var INDEX_HEIZUNG_RUECKLAUF_MEHR = 74;
+/** @const */
+var INDEX_HEIZUNG_RUECKLAUF_WENIGER = 74;
+
+/**
+ * Temperature unit.
+ * @const
+ */
+var UNIT_TEMPERATURE_CELSIUS = '°C';
+
 var tcpClient;
 
 /**
@@ -74,15 +110,51 @@ function toggleHelp() {
     tcpClient.connect(function() {
       term.output('Connected to ' + host + ':' + port + '<br/>');
       tcpClient.addResponseListener(function(data) {
-        // split integers into lines
-        var output = '';
-        for (var i = 0; i < data.length; i++) {
-          var value = data[i];
-          output += '[' + i + ']: ' + value + '<br/>';
+        if (data[0] != REQUEST_STATUS) {
+          console.error('Invalid response: was no status package');
+          return;
         }
+
+        // extract some values
+        var output = '';
+        output += getValue(data, INDEX_TEMP_VORLAUF) + '<br/>';
+        output += getValue(data, INDEX_TEMP_RUECKLAUF) + '<br/>';
+        output += getValue(data, INDEX_TEMP_RUECKLAUF_SOLL) + '<br/>';
+        output += getValue(data, INDEX_TEMP_OUTDOORS) + '<br/>';
         term.output(output + '<br/>');
       });
     });
+  }
+
+  function getValue(array, index) {
+    switch (index) {
+      case INDEX_TEMP_VORLAUF:
+      case INDEX_TEMP_RUECKLAUF:
+      case INDEX_TEMP_RUECKLAUF_SOLL:
+      case INDEX_TEMP_OUTDOORS:
+       return getTemperatureValue(array, index);
+    }
+    return 'n/a';
+  }
+
+  function getTemperatureValue(array, index) {
+    var label = 'Unknown';
+    switch(index) {
+      case INDEX_TEMP_VORLAUF:
+        label = 'Temp. Vorlauf';
+        break;
+      case INDEX_TEMP_RUECKLAUF:
+        label = 'Temp. Rücklauf';
+        break;
+      case INDEX_TEMP_RUECKLAUF_SOLL:
+        label = 'Temp. Rücklauf Soll';
+        break;
+      case INDEX_TEMP_OUTDOORS:
+        label = 'Temp. Aussen';
+        break;
+    }
+    // offset by 3 (exclude request code, status code and length field)
+    return label + ': ' + (array[index + 3] / 10) + ' ' + UNIT_TEMPERATURE_CELSIUS;
   }
 
   function disconnect() {
