@@ -37,6 +37,7 @@ var INDEX_HEIZUNG_RUECKLAUF_WENIGER = 75;
 var UNIT_TEMPERATURE_CELSIUS = '°C';
 
 var tcpClient;
+var isRequestStatus = false;
 
 /**
  * Shows and hides the help panel
@@ -63,9 +64,6 @@ function toggleHelp() {
 
   term.output('Press Esc for options.<br/>');
 
-  // Make an ANSI Color converter.
-  var ansiConv = new AnsiConverter();
-
   // Connect to WP by default.
   var host = 'waermepumpe';
   var port = 8888;
@@ -91,11 +89,14 @@ function toggleHelp() {
     toggleHelp();
   });
 
-  // request status button
+  // request status toggle button
   var requestStatusButton = document.getElementById('requestStatus');
   requestStatusButton.addEventListener('click', function () {
-    if (tcpClient) {
-      tcpClient.sendInteger(REQUEST_STATUS);
+    if (isRequestStatus) {
+      isRequestStatus = false;
+    } else {
+      isRequestStatus = true;
+      requestStatus();
     }
   });
 
@@ -127,6 +128,12 @@ function toggleHelp() {
         output += getValue(data, INDEX_HEIZUNG_RUECKLAUF_MEHR) + '<br/>';
         output += getValue(data, INDEX_HEIZUNG_RUECKLAUF_WENIGER) + '<br/>';
         term.output(output + '<br/>');
+
+        if (isRequestStatus) {
+          window.setTimeout(function () {
+            requestStatus();
+          }, 1500);
+        }
       });
     });
   }
@@ -188,5 +195,10 @@ function toggleHelp() {
     }
   }
 
-})();
+  function requestStatus() {
+    if (tcpClient) {
+      tcpClient.sendInteger(REQUEST_STATUS);
+    }
+  }
 
+})();
