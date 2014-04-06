@@ -74,12 +74,12 @@ function toggleHelp() {
     tcpClient.connect(function() {
       term.output('Connected to ' + host + ':' + port + '<br/>');
       tcpClient.addResponseListener(function(data) {
-        // Run response through ANSI colorizer.
-        var formattedData = ansiConv.formatAnsi(data);
-        // Split into multiple lines.
-        var lines = formattedData.split('\n');
-        // Render response in the terminal.
-        var output = lines.join('<br/>');
+        // split integers into lines
+        var output = '';
+        for (var i = 0; i < data.length; i++) {
+          var value = data[i];
+          output += '[' + i + ']: ' + value + '<br/>';
+        }
         term.output(output + '<br/>');
       });
     });

@@ -173,10 +173,10 @@ Author: Boris Smus (smus@chromium.org)
   TcpClient.prototype._onDataRead = function(readInfo) {
     // Call received callback if there's data in the response.
     if (readInfo.resultCode > 0 && this.callbacks.recv) {
-      log('onDataRead');
-      // Convert ArrayBuffer to string.
-      this._arrayBufferToString(readInfo.data, function(str) {
-        this.callbacks.recv(str);
+      // Convert ArrayBuffer to list of 32bit integers
+      log('onDataRead: ' + readInfo.data.byteLength + " Bytes");
+      this._arrayBufferToInt32ArrayBE(readInfo.data, function(array) {
+        this.callbacks.recv(array);
       }.bind(this));
     }
   };
@@ -210,6 +210,22 @@ Author: Boris Smus (smus@chromium.org)
     };
     var blob=new Blob([ buf ], { type: 'application/octet-stream' });
     reader.readAsText(blob);
+  };
+
+  /**
+   * Converts an array buffer to a Int32Array using big endian (network) byte order.
+   *
+   * @private
+   * @param {ArrayBuffer} buffer The buffer to convert
+   * @param {Function} callback The function to call with the result when conversion is complete
+   */
+  TcpClient.prototype._arrayBufferToInt32ArrayBE = function (buffer, callback) {
+    var dataView = new DataView(buffer);
+    var intArray = new Int32Array(dataView.byteLength / 4);
+    for (var i = 0; i < dataView.byteLength; i = i + 4) {
+      intArray[i] = dataView.getInt32(i, false);
+    }
+    callback(intArray);
   };
 
   /**
