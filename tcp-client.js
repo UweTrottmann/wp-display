@@ -222,8 +222,9 @@ Author: Boris Smus (smus@chromium.org)
   TcpClient.prototype._arrayBufferToInt32ArrayBE = function (buffer, callback) {
     var dataView = new DataView(buffer);
     var intArray = new Int32Array(dataView.byteLength / 4);
-    for (var i = 0; i < dataView.byteLength; i = i + 4) {
-      intArray[i] = dataView.getInt32(i, false);
+    for (var i = 0; i < intArray.length; i++) {
+      // in each step: index + 1, offset + 4
+      intArray[i] = dataView.getInt32(i * 4, false);
     }
     callback(intArray);
   };
