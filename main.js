@@ -184,7 +184,7 @@ function toggleHelp() {
         label = 'T Rücklauf < (T Rücklauf Soll - Hysterese)';
         break;
       case INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER:
-        label = 'T Rücklauf > (T Rücklauf Soll - Hysterese)';
+        label = 'T Rücklauf > (T Rücklauf Soll + Hysterese)';
         break;
       case INDEX_TIME_VERDICHTER_STAND:
         label = 'Verdichter Stillstand';
