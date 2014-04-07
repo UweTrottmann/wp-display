@@ -26,9 +26,12 @@ var INDEX_TEMP_RUECKLAUF_SOLL = 12;
 var INDEX_TEMP_OUTDOORS = 15;
 
 /** @const */
-var INDEX_HEIZUNG_RUECKLAUF_MEHR = 74;
+var INDEX_TIME_VERDICHTER_STAND = 73;
+
 /** @const */
-var INDEX_HEIZUNG_RUECKLAUF_WENIGER = 75;
+var INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR = 74;
+/** @const */
+var INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER = 75;
 
 /**
  * Temperature unit.
@@ -125,8 +128,9 @@ function toggleHelp() {
         output += getValue(data, INDEX_TEMP_RUECKLAUF) + '<br/>';
         output += getValue(data, INDEX_TEMP_RUECKLAUF_SOLL) + '<br/>';
         output += getValue(data, INDEX_TEMP_OUTDOORS) + '<br/>';
-        output += getValue(data, INDEX_HEIZUNG_RUECKLAUF_MEHR) + '<br/>';
-        output += getValue(data, INDEX_HEIZUNG_RUECKLAUF_WENIGER) + '<br/>';
+        output += getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR) + '<br/>';
+        output += getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER) + '<br/>';
+        output += getValue(data, INDEX_TIME_VERDICHTER_STAND) + '<br/>';
         term.output(output + '<br/>');
 
         if (isRequestStatus) {
@@ -145,8 +149,9 @@ function toggleHelp() {
       case INDEX_TEMP_RUECKLAUF_SOLL:
       case INDEX_TEMP_OUTDOORS:
         return getTemperatureValue(array, index);
-      case INDEX_HEIZUNG_RUECKLAUF_MEHR:
-      case INDEX_HEIZUNG_RUECKLAUF_WENIGER:
+      case INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR:
+      case INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER:
+      case INDEX_TIME_VERDICHTER_STAND:
         return getTimeValue(array, index);
     }
     return 'n/a';
@@ -175,11 +180,14 @@ function toggleHelp() {
   function getTimeValue(array, index) {
     var label = 'Unknown';
     switch (index) {
-      case INDEX_HEIZUNG_RUECKLAUF_MEHR:
+      case INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR:
         label = 'T Rücklauf < (T Rücklauf Soll - Hysterese)';
         break;
-      case INDEX_HEIZUNG_RUECKLAUF_WENIGER:
+      case INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER:
         label = 'T Rücklauf > (T Rücklauf Soll - Hysterese)';
+        break;
+      case INDEX_TIME_VERDICHTER_STAND:
+        label = 'Verdichter Stillstand';
         break;
     }
     var seconds = array[index + 3];
