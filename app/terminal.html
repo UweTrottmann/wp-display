@@ -27,32 +27,34 @@ Author: Eric Bidelman (ericbidelman@chromium.org)
 </head>
 <body>
 
-<aside class="help hidden">
-  <section>
-  <div>
-    <h2>Connect</h2>
-    <label for="host">Hostname:</label>
-    <input type="text" id="host" value="waermepumpe">
-    <label for="port">Port:</label>
-    <input type="number" id="port" value="8888">
-    <button id="connect">Connect</button>
-    <button id="disconnect">Disconnect</button>
-  </div>
-  <div>
-    <h2>What is this?</h2>
-    <p>An apps V2 telnet client.</p>
-  </div>
-  </section>
-</aside>
+  <aside class="help hidden">
+    <section>
+      <div>
+        <h2>Connect</h2>
+        <label for="host">Hostname:</label>
+        <input type="text" id="host" value="waermepumpe">
+        <label for="port">Port:</label>
+        <input type="number" id="port" value="8888">
+      </div>
+      <div>
+        <h2>What is this?</h2>
+        <p>Displays status information provided through the TCP server of alpha innotec's Luxtronik 2.0 heat pump controller.</p>
+      </div>
+    </section>
+  </aside>
 
-<div id="container"></div>
-<div>
-    <button id="requestStatus">Toggle status updates</button>
-</div>
+  <div id="data"></div>
+  <div id="buttons">
+      <button id="requestStatus">Toggle status updates</button>
+      <button id="connect">Connect</button>
+      <button id="disconnect">Disconnect</button>
+  </div>
+  <div id="status"></div>
+  <div>
+    <p>Press Esc for options.</p>
+  </div>
 
 <script src="tcp-client.js"></script>
-<script src="ansi-converter.js"></script>
-<script src="terminal.js"></script>
 <script src="main.js"></script>
 
 </body>
