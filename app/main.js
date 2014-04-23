@@ -40,6 +40,7 @@ var INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER = 75;
 var UNIT_TEMPERATURE_CELSIUS = "°C";
 
 var tcpClient;
+var isConnected = false;
 var isRequestStatus = false;
 
 var dataView;
@@ -72,30 +73,22 @@ function toggleHelp() {
   // connect button
   var connectButton = document.getElementById("connect");
   connectButton.addEventListener("click", function () {
-
-    // Disconnect from previous socket.
-    var host = document.getElementById("host").value;
-    var port = parseInt(document.getElementById("port").value, 10);
-    disconnect();
-    connect(host, port);
-
-  });
-
-  // disconnect button
-  var disconnectButton = document.getElementById("disconnect");
-  disconnectButton.addEventListener("click", function () {
-    disconnect();
+    if (!tcpClient || !tcpClient.isConnected) {
+      var host = document.getElementById("host").value;
+      var port = parseInt(document.getElementById("port").value, 10);
+      disconnect();
+      connect(host, port);
+      connectButton.textContent = "Disconnect";
+    } else {
+      disconnect();
+      connectButton.textContent = "Connect";
+    }
   });
 
   // request status toggle button
   var requestStatusButton = document.getElementById("requestStatus");
   requestStatusButton.addEventListener("click", function () {
-    if (isRequestStatus) {
-      isRequestStatus = false;
-    } else {
-      isRequestStatus = true;
-      requestStatus();
-    }
+    toggleRequests();
   });
 
   function setData(dataText) {
@@ -110,6 +103,15 @@ function toggleHelp() {
       statusView = document.getElementById("status");
     }
     statusView.innerHTML = "<p>" + statusText + "</p>";
+  }
+
+  function toggleRequests() {
+    if (isRequestStatus) {
+      isRequestStatus = false;
+    } else {
+      isRequestStatus = true;
+      requestStatus();
+    }
   }
 
   /**
