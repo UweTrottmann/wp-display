@@ -102,14 +102,14 @@ function toggleHelp() {
     if (!dataView) {
       dataView = document.getElementById("data");
     }
-    dataView.textContent = dataText;
+    dataView.innerHTML = dataText;
   }
 
   function setStatus(statusText) {
     if (!statusView) {
       statusView = document.getElementById("status");
     }
-    statusView.textContent = statusText;
+    statusView.innerHTML = "<p>" + statusText + "</p>";
   }
 
   /**
