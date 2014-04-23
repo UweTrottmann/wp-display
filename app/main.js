@@ -40,7 +40,9 @@ var INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER = 75;
 var UNIT_TEMPERATURE_CELSIUS = "°C";
 
 var tcpClient;
-var isConnected = false;
+var timeoutRunnable;
+
+/** Whether a new status should be requested after one was received. */
 var isRequestStatus = false;
 
 var dataView;
@@ -56,7 +58,7 @@ function toggleHelp() {
 
 (function () {
 
-  // Capture key presses
+  // help screen toggle
   document.body.addEventListener("keydown", function (e) {
     if (e.keyCode == 27) { // Esc
       toggleHelp();
@@ -65,10 +67,18 @@ function toggleHelp() {
     }
   }, false);
 
-  // Connect to WP by default.
+  // set default connection
+  // TODO persist settings
   var host = "waermepumpe";
   var port = 8888;
-  // connect(host, port);
+
+  // request status toggle button
+  var requestStatusButton = document.getElementById("requestStatus");
+  requestStatusButton.addEventListener("click", function () {
+      setStatusUpdatesState(!isRequestStatus);
+  });
+  requestStatusButton.disabled = true;
+  setStatusUpdatesState(false);
 
   // connect button
   var connectButton = document.getElementById("connect");
@@ -79,40 +89,13 @@ function toggleHelp() {
       disconnect();
       connect(host, port);
       connectButton.textContent = "Disconnect";
+      requestStatusButton.disabled = false;
     } else {
       disconnect();
       connectButton.textContent = "Connect";
+      requestStatusButton.disabled = true;
     }
   });
-
-  // request status toggle button
-  var requestStatusButton = document.getElementById("requestStatus");
-  requestStatusButton.addEventListener("click", function () {
-    toggleRequests();
-  });
-
-  function setData(dataText) {
-    if (!dataView) {
-      dataView = document.getElementById("data");
-    }
-    dataView.innerHTML = dataText;
-  }
-
-  function setStatus(statusText) {
-    if (!statusView) {
-      statusView = document.getElementById("status");
-    }
-    statusView.innerHTML = "<p>" + statusText + "</p>";
-  }
-
-  function toggleRequests() {
-    if (isRequestStatus) {
-      isRequestStatus = false;
-    } else {
-      isRequestStatus = true;
-      requestStatus();
-    }
-  }
 
   /**
    * Connects to a host and port
@@ -145,7 +128,7 @@ function toggleHelp() {
         setData(output);
 
         if (isRequestStatus) {
-          window.setTimeout(function () {
+          timeoutRunnable = window.setTimeout(function () {
             requestStatus();
           }, 1500);
         }
@@ -208,9 +191,35 @@ function toggleHelp() {
   }
 
   function disconnect() {
+    setStatusUpdatesState(false);
     if (tcpClient) {
       setStatus("Disconnected.");
       tcpClient.disconnect();
+    }
+  }
+
+  function setData(dataText) {
+    if (!dataView) {
+      dataView = document.getElementById("data");
+    }
+    dataView.innerHTML = dataText;
+  }
+
+  function setStatus(statusText) {
+    if (!statusView) {
+      statusView = document.getElementById("status");
+    }
+    statusView.innerHTML = "<p>" + statusText + "</p>";
+  }
+
+  function setStatusUpdatesState(isEnabled) {
+    isRequestStatus = isEnabled;
+    if (isEnabled) {
+      requestStatusButton.textContent = "Toggle status updates [ON]";
+      requestStatus();
+    } else {
+      window.clearTimeout(timeoutRunnable);
+      requestStatusButton.textContent = "Toggle status updates [OFF]";
     }
   }
 
