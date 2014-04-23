@@ -78,7 +78,6 @@ function toggleHelp() {
     var port = parseInt(document.getElementById("port").value, 10);
     disconnect();
     connect(host, port);
-    toggleHelp();
 
   });
 
@@ -86,7 +85,6 @@ function toggleHelp() {
   var disconnectButton = document.getElementById("disconnect");
   disconnectButton.addEventListener("click", function () {
     disconnect();
-    toggleHelp();
   });
 
   // request status toggle button
