@@ -5,7 +5,7 @@
  * @see http://developer.chrome.com/apps/app.window.html
  */
 chrome.app.runtime.onLaunched.addListener(function() {
-  chrome.app.window.create('terminal.html', {
+  chrome.app.window.create('main.html', {
   	id: "mainwin",
     bounds: {
       width: 600,
