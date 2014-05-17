@@ -29,15 +29,26 @@
       </section>
     </aside>
 
-    <div id="data"></div>
-    <div id="buttons">
-      <button id="connect">Connect</button>
-      <button id="requestStatus">Toggle status updates</button>
-    </div>
-    <div id="status"></div>
-    <div>
-      <p>Press Esc for options.</p>
-    </div>
+    <div class="container-fluid">
+
+      <!-- controls -->
+      <div class="row">
+        <div id="buttons">
+          <button type="button" class="btn btn-default" id="connect">Connect</button>
+          <button type="button" class="btn btn-default" id="requestStatus">Toggle status updates</button>
+        </div>
+        <div id="status"></div>
+        <div>
+          <p>Press Esc for options.</p>
+        </div>
+      </div>
+
+      <!-- Data views -->
+      <div class="row">
+        <div id="data"></div>
+      </div>
+
+    </div><!-- container -->
 
     <script src="tcp-client.js"></script>
     <script src="main.js"></script>
