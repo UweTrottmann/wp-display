@@ -33,44 +33,64 @@
 
       <!-- controls -->
       <div class="row">
-        <div id="buttons">
+        <div id="buttons" class="col-sm-6">
           <button type="button" class="btn btn-default" id="connect">Connect</button>
           <button type="button" class="btn btn-default" id="requestStatus">Toggle status updates</button>
         </div>
-        <div id="status"></div>
-        <div>
-          <p>Press Esc for options.</p>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-6">
+          <em><div id="status"></div></em>
         </div>
       </div>
+
+      <p></p>
 
       <!-- Data views -->
       <div class="row">
-        <div class="col-sm-3">
-          Vorlauf <span id="temp-outgoing" class="temp-value">0</span> °C
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-xs-6">
+              <b>Vorlauf</b><br/>
+              <span id="temp-outgoing" class="temp-value">0</span> °C
+            </div>
+            <div class="col-xs-6">
+              <b>Rücklauf</b><br/>
+              <span id="temp-return" class="temp-value">0</span> °C
+            </div>
+          </div>  
         </div>
-        <div class="col-sm-3">
-          Rücklauf <span id="temp-return" class="temp-value">0</span> °C
-        </div>
-        <div class="col-sm-3">
-          Rücklauf Soll<span id="temp-return-should" class="temp-value">0</span> °C
-        </div>
-        <div class="col-sm-3">
-          Aussentemperatur <span id="temp-outdoors" class="temp-value">0</span> °C
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-xs-6">
+              <b>Aussentemperatur</b><br/>
+              <span id="temp-outdoors" class="temp-value">0</span> °C
+            </div>
+            <div class="col-xs-6">
+              <b>Rücklauf Soll</b><br/>
+              <span id="temp-return-should" class="temp-value">0</span> °C
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-sm-3">
-          Uhrzeit <span id="time">00:00:00</span>
+          <b>Uhrzeit</b><br/>
+          <span id="time">00:00:00</span><br/>
+          <br/>
+          <b>Verdichter Stillstand</b><br/>
+          <span id="time-compressor-noop">0 h 0 min 0 sec</span><br/>
+          <br/>
         </div>
-        <div class="col-sm-3">
-          Verdichter Stillstand <span id="time-compressor-noop">0 h 0 min 0 sec</span>
-        </div>
-        <div class="col-sm-3">
-          T Rücklauf < (T Rücklauf Soll - Hysterese) <span id="time-return-lower">0 h 0 min 0 sec</span>
-        </div>
-        <div class="col-sm-3">
-          T Rücklauf > (T Rücklauf Soll + Hysterese) <span id="time-return-higher">0 h 0 min 0 sec</span>
+        <div class="col-sm-6">
+          <b>T Rücklauf < (T Rücklauf Soll - Hysterese)</b><br/>
+          <span id="time-return-lower">0 h 0 min 0 sec</span><br/>
+          <br/>
+          <b>T Rücklauf > (T Rücklauf Soll + Hysterese)</b><br/>
+          <span id="time-return-higher">0 h 0 min 0 sec</span><br/>
+          <br/>
         </div>
       </div>
 
