@@ -45,8 +45,23 @@
 
       <!-- Data views -->
       <div class="row">
-        <div id="data"></div>
+        <div class="col-xs-2">
+          Rücklauf <span id="temp-return">0</span> °C
+        </div>
+        <div class="col-xs-2">
+          Rücklauf Soll<span id="temp-return-should">0</span> °C
+        </div>
       </div>
+
+      <p>Uhrzeit <span id="time"></span></p>
+      <p>Verdichter Stillstand <span id="time-compressor-noop"></span></p>
+      <p>T Rücklauf < (T Rücklauf Soll - Hysterese) <span id="time-return-lower"></span></p>
+      <p>T Rücklauf > (T Rücklauf Soll + Hysterese) <span id="time-return-higher"></span></p>
+
+      <p>Aussentemperatur <span id="temp-outdoors"></span> °C</p>
+      <p>Vorlauf <span id="temp-outgoing"></span> °C</p>
+
+      <div id="data"></div>
 
     </div><!-- container -->
 

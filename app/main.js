@@ -29,9 +29,9 @@ var INDEX_TEMP_OUTDOORS = 15;
 var INDEX_TIME_VERDICHTER_STAND = 73;
 
 /** @const */
-var INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR = 74;
+var INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER = 74;
 /** @const */
-var INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER = 75;
+var INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR = 75;
 
 /**
  * Temperature unit.
@@ -97,6 +97,16 @@ function toggleHelp() {
     }
   });
 
+  // data fields
+  var time = document.getElementById("time");
+  var timeCompressorNoop = document.getElementById("time-compressor-noop");
+  var timeReturnLower = document.getElementById("time-return-lower");
+  var timeReturnHigher = document.getElementById("time-return-higher");
+  var tempOutdoors = document.getElementById("temp-outdoors");
+  var tempOutgoing = document.getElementById("temp-outgoing");
+  var tempReturn = document.getElementById("temp-return");
+  var tempReturnShould = document.getElementById("temp-return-should");
+
   /**
    * Connects to a host and port
    *
@@ -112,20 +122,21 @@ function toggleHelp() {
           setData("Invalid response: request code does not match");
           return;
         }
-
-        // extract some values
-        var output = "";
+        
+        // time
         var currentTime = new Date();
-        output += currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
-        output += "<br/>";
-        output += getValue(data, INDEX_TEMP_VORLAUF) + "<br/>";
-        output += getValue(data, INDEX_TEMP_RUECKLAUF) + "<br/>";
-        output += getValue(data, INDEX_TEMP_RUECKLAUF_SOLL) + "<br/>";
-        output += getValue(data, INDEX_TEMP_OUTDOORS) + "<br/>";
-        output += getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR) + "<br/>";
-        output += getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER) + "<br/>";
-        output += getValue(data, INDEX_TIME_VERDICHTER_STAND) + "<br/>";
-        setData(output);
+        time.innerText = currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
+        
+        // time values
+        timeCompressorNoop.innerText = getValue(data, INDEX_TIME_VERDICHTER_STAND);
+        timeReturnLower.innerText = getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER);
+        timeReturnHigher.innerText = getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR);
+
+        // temp values
+        tempOutdoors.innerText = getValue(data, INDEX_TEMP_OUTDOORS);
+        tempOutgoing.innerText = getValue(data, INDEX_TEMP_VORLAUF);
+        tempReturn.innerText = getValue(data, INDEX_TEMP_RUECKLAUF);
+        tempReturnShould.innerText = getValue(data, INDEX_TEMP_RUECKLAUF_SOLL);
 
         if (isRequestStatus) {
           timeoutRunnable = window.setTimeout(function () {
@@ -152,42 +163,19 @@ function toggleHelp() {
   }
 
   function getTemperatureValue(array, index) {
-    var label = "Unknown";
-    switch (index) {
-      case INDEX_TEMP_VORLAUF:
-        label = "Temp. Vorlauf";
-        break;
-      case INDEX_TEMP_RUECKLAUF:
-        label = "Temp. Rücklauf";
-        break;
-      case INDEX_TEMP_RUECKLAUF_SOLL:
-        label = "Temp. Rücklauf Soll";
-        break;
-      case INDEX_TEMP_OUTDOORS:
-        label = "Temp. Aussen";
-        break;
-    }
     // offset by 3 (exclude request code, status code and length field)
-    return label + ": " + (array[index + 3] / 10) + " " + UNIT_TEMPERATURE_CELSIUS;
+    return (array[index + 3] / 10);
   }
 
   function getTimeValue(array, index) {
-    var label = "Unknown";
-    switch (index) {
-      case INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR:
-        label = "T Rücklauf < (T Rücklauf Soll - Hysterese)";
-        break;
-      case INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER:
-        label = "T Rücklauf > (T Rücklauf Soll + Hysterese)";
-        break;
-      case INDEX_TIME_VERDICHTER_STAND:
-        label = "Verdichter Stillstand";
-        break;
-    }
-    var seconds = array[index + 3];
-    var minutes = (seconds - (seconds % 60)) / 60;
     // offset by 3 (exclude request code, status code and length field)
-    return label + ": " + minutes + " min " + (seconds % 60) + " sec";
+    var seconds = array[index + 3];
+
+    var hours = (seconds - (seconds % 3600)) / 3600;
+    seconds = seconds - (hours * 3600);
+    var minutes = (seconds - (seconds % 60)) / 60;
+    seconds = seconds % 60;
+    return hours + " h " + minutes + " min " + seconds + " sec";
   }
 
   function disconnect() {
@@ -196,13 +184,6 @@ function toggleHelp() {
       setStatus("Disconnected.");
       tcpClient.disconnect();
     }
-  }
-
-  function setData(dataText) {
-    if (!dataView) {
-      dataView = document.getElementById("data");
-    }
-    dataView.innerHTML = dataText;
   }
 
   function setStatus(statusText) {
