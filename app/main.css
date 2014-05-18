@@ -62,6 +62,10 @@ button {
   width: 500px;
 }
 
+.temp-value {
+  font-size: 48px;
+}
+
 #data {
   padding-bottom: 8px;
 }
