@@ -98,10 +98,8 @@ function HeatingDisplayControl($scope) {
           return;
         }
         
-        // time
-        var currentTime = new Date();
-        $scope.time = currentTime.getHours() + ":" + currentTime.getMinutes()
-          + ":" + currentTime.getSeconds();
+        // current time
+        $scope.time = moment().format('H:mm:ss');
         
         // time values
         $scope.timeCompressorNoop = $scope.getValue(data, INDEX_TIME_VERDICHTER_STAND);
