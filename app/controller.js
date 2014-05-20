@@ -51,7 +51,7 @@ function HeatingDisplayControl($scope) {
   $scope.tempReturn = 0.0;
   $scope.tempReturnShould = 0.0;
 
-  $scope.textStatus = "";
+  $scope.textStatus = "Disconnected.";
   $scope.textBtnConnect = "Connect";
   $scope.textRequestStatus = "OFF";
 
