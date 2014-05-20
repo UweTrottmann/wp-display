@@ -40,6 +40,8 @@ function HeatingDisplayControl($scope) {
   $scope.tcpClient;
   $scope.timeoutRunnable;
 
+  $scope.refreshIntervalMs = 2000;
+
   $scope.time = "00:00:00";
   $scope.timeCompressorNoop = "0 h 0 min 0 sec";
   $scope.timeReturnLower = "0 h 0 min 0 sec";
@@ -96,11 +98,14 @@ function HeatingDisplayControl($scope) {
         $scope.tempReturn = $scope.getValue(data, INDEX_TEMP_RUECKLAUF);
         $scope.tempReturnShould = $scope.getValue(data, INDEX_TEMP_RUECKLAUF_SOLL);
 
+        // force angular to update watched values
+        $scope.$apply();
+
         // schedule next request?
         if ($scope.isRequestStatus) {
           $scope.timeoutRunnable = window.setTimeout(function () {
             $scope.requestStatus();
-          }, 1500);
+          }, $scope.refreshIntervalMs);
         }
       });
 
