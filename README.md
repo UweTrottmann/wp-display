@@ -1,4 +1,7 @@
 # WP Display
+
+![Screenshot](/screenshot_1280_800.png)
+
 Displays status information provided through the TCP server of alpha innotec's Luxtronik 2.0 heat pump controller.
 
 This is an alternative to the Java applet used to configure and get info about the heat pump, which is broken from JRE 8 onwards.
