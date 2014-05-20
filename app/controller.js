@@ -34,6 +34,21 @@ var INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER = 74;
 var INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR = 75;
 
 function HeatingDisplayControl($scope) {
+  // localized strings
+  $scope.strAppDescription = chrome.i18n.getMessage("appDesc");
+  $scope.strTitleSettings = chrome.i18n.getMessage("titleSettings");
+  $scope.strLabelHost = chrome.i18n.getMessage("hostname");
+  $scope.strLabelPort = chrome.i18n.getMessage("port");
+  $scope.strTitleAbout = chrome.i18n.getMessage("titleAbout");
+  $scope.strLabelTempOutgoing = chrome.i18n.getMessage("tempOutgoing");
+  $scope.strLabelTempReturn = chrome.i18n.getMessage("tempReturn");
+  $scope.strLabelTempReturnShould = chrome.i18n.getMessage("tempReturnShould");
+  $scope.strLabelTempOutdoors = chrome.i18n.getMessage("tempOutdoors");
+  $scope.strLabelTime = chrome.i18n.getMessage("time");
+  $scope.strLabelTimeCompressorNoop = chrome.i18n.getMessage("timeCompressorNoop");
+  $scope.strLabelTimeReturnLower = chrome.i18n.getMessage("timeReturnLower");
+  $scope.strLabelTimeReturnHigher = chrome.i18n.getMessage("timeReturnHigher");
+
   $scope.host = "waermepumpe";
   $scope.port = 8888;
 
@@ -51,8 +66,8 @@ function HeatingDisplayControl($scope) {
   $scope.tempReturn = 0.0;
   $scope.tempReturnShould = 0.0;
 
-  $scope.textStatus = "Disconnected.";
-  $scope.textBtnConnect = "Connect";
+  $scope.textStatus = chrome.i18n.getMessage("disconnected");
+  $scope.textBtnConnect = chrome.i18n.getMessage("connect");
   $scope.textRequestStatus = "OFF";
 
   $scope.isRequestStatus = false;
@@ -63,10 +78,10 @@ function HeatingDisplayControl($scope) {
       // TODO get host and port from settings UI
       $scope.disconnect();
       $scope.connect();
-      $scope.textBtnConnect = "Disconnect";
+      $scope.textBtnConnect = chrome.i18n.getMessage("disconnect");
     } else {
       $scope.disconnect();
-      $scope.textBtnConnect = "Connect";
+      $scope.textBtnConnect = chrome.i18n.getMessage("connect");
     }
   }
 
