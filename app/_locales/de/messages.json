@@ -7,6 +7,10 @@
     "message": "Verbinden",
     "description": ""
   },
+  "connected": {
+    "message": "Verbunden mit",
+    "description": ""
+  },
   "disconnect": {
     "message": "Trennen",
     "description": ""

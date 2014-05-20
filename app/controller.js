@@ -89,7 +89,7 @@ function HeatingDisplayControl($scope) {
     $scope.tcpClient = new TcpClient($scope.host, $scope.port);
     $scope.tcpClient.connect(function () {
       // connected, display status
-      $scope.textStatus = "Connected to " + $scope.host + ":" + $scope.port;
+      $scope.textStatus = chrome.i18n.getMessage("connected") + " " + $scope.host + ":" + $scope.port;
 
       // add response listener
       $scope.tcpClient.addResponseListener(function (data) {
@@ -131,7 +131,7 @@ function HeatingDisplayControl($scope) {
   $scope.disconnect = function() {
     $scope.setStatusUpdatesState(false);
     if ($scope.tcpClient) {
-      $scope.textStatus = "Disconnected.";
+      $scope.textStatus = chrome.i18n.getMessage("disconnected");
       $scope.tcpClient.disconnect();
     }
   }

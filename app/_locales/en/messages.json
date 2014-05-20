@@ -7,6 +7,10 @@
     "message": "Connect",
     "description": ""
   },
+  "connected": {
+    "message": "Connected to",
+    "description": ""
+  },
   "disconnect": {
     "message": "Disconnect",
     "description": ""
