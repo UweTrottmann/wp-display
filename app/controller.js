@@ -1,3 +1,7 @@
+function HeatingDisplayControl($scope) {
+  $scope.requestStatus = "OFF";
+}
+
 var REQUEST_STATUS = 3004;
 
 /**
@@ -49,8 +53,9 @@ var dataView;
 var statusView;
 
 /**
+/**
  * Shows and hides the help panel
- */
+ *
 function toggleHelp() {
   document.querySelector(".help").classList.toggle("hidden");
   document.body.classList.toggle("dim");
@@ -72,30 +77,11 @@ function toggleHelp() {
   var host = "waermepumpe";
   var port = 8888;
 
-  // request status toggle button
-  var requestStatusButton = document.getElementById("requestStatus");
-  requestStatusButton.addEventListener("click", function () {
-      setStatusUpdatesState(!isRequestStatus);
-  });
-  requestStatusButton.disabled = true;
-  setStatusUpdatesState(false);
+  // buttons
+  var connectButton = document.getElementById("btn-connect");
 
-  // connect button
-  var connectButton = document.getElementById("connect");
-  connectButton.addEventListener("click", function () {
-    if (!tcpClient || !tcpClient.isConnected) {
-      var host = document.getElementById("host").value;
-      var port = parseInt(document.getElementById("port").value, 10);
-      disconnect();
-      connect(host, port);
-      connectButton.textContent = "Disconnect";
-      requestStatusButton.disabled = false;
-    } else {
-      disconnect();
-      connectButton.textContent = "Connect";
-      requestStatusButton.disabled = true;
-    }
-  });
+  // status labels
+  var requestStatusLabel = document.getElementById("request-status");
 
   // data fields
   var time = document.getElementById("time");
@@ -107,12 +93,31 @@ function toggleHelp() {
   var tempReturn = document.getElementById("temp-return");
   var tempReturnShould = document.getElementById("temp-return-should");
 
+  setStatusUpdatesState(false);
+
+  // connect button
+  connectButton.addEventListener("click", function () {
+    if (!tcpClient || !tcpClient.isConnected) {
+      var host = document.getElementById("host").value;
+      var port = parseInt(document.getElementById("port").value, 10);
+      disconnect();
+      connect(host, port);
+      connectButton.textContent = "Disconnect";
+
+      // start requesting status updates
+      setStatusUpdatesState(true);
+    } else {
+      disconnect();
+      connectButton.textContent = "Connect";
+    }
+  });
+
   /**
    * Connects to a host and port
    *
    * @param {String} host The remote host to connect to
    * @param {Number} port The port to connect to at the remote host
-   */
+   *
   function connect(host, port) {
     tcpClient = new TcpClient(host, port);
     tcpClient.connect(function () {
@@ -196,11 +201,11 @@ function toggleHelp() {
   function setStatusUpdatesState(isEnabled) {
     isRequestStatus = isEnabled;
     if (isEnabled) {
-      requestStatusButton.textContent = "Toggle status updates [ON]";
+      requestStatusLabel.textContent = "ON";
       requestStatus();
     } else {
       window.clearTimeout(timeoutRunnable);
-      requestStatusButton.textContent = "Toggle status updates [OFF]";
+      requestStatusLabel.textContent = "OFF";
     }
   }
 
@@ -211,3 +216,4 @@ function toggleHelp() {
   }
 
 })();
+*/

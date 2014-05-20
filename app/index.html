@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html ng-app>
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>WP Display</title>
 
     <!-- Bootstrap -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" media="all" href="main.css">
 
-    <!-- Manifest -->
-    <link rel="chrome-application-definition" href="manifest.json">
+    <script src="angular.min.js"></script>
+    <script src="controller.js"></script>
+    <link rel="stylesheet" href="main.css">
+    
   </head>
-  <body>
+  <body ng-controller="HeatingDisplayControl">
     <aside class="help hidden">
       <section>
         <div>
@@ -34,8 +34,8 @@
       <!-- controls -->
       <div class="row">
         <div id="buttons" class="col-sm-6">
-          <button type="button" class="btn btn-default" id="connect">Connect</button>
-          <button type="button" class="btn btn-default" id="requestStatus">Toggle status updates</button>
+          <button type="button" class="btn btn-default" id="btn-connect">Connect</button>
+          <span>{{requestStatus}}</span>
         </div>
       </div>
 
@@ -95,9 +95,6 @@
       </div>
 
     </div><!-- container -->
-
-    <script src="tcp-client.js"></script>
-    <script src="main.js"></script>
 
   </body>
 </html>
