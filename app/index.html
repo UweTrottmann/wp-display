@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <script src="angular.min.js"></script>
+    <script src="tcp-client.js"></script>
     <script src="controller.js"></script>
     <link rel="stylesheet" href="main.css">
     
@@ -34,14 +35,14 @@
       <!-- controls -->
       <div class="row">
         <div id="buttons" class="col-sm-6">
-          <button type="button" class="btn btn-default" id="btn-connect">Connect</button>
-          <span>{{requestStatus}}</span>
+          <button type="button" class="btn btn-default" ng-click="toggleConnection()" ng-model="btnConnect">{{textBtnConnect}}</button>
+          <span>{{textRequestStatus}}</span>
         </div>
       </div>
 
       <div class="row">
         <div class="col-sm-6">
-          <em><div id="status"></div></em>
+          <em><div>{{textStatus}}</div></em>
         </div>
       </div>
 
@@ -53,11 +54,11 @@
           <div class="row">
             <div class="col-xs-6">
               <b>Vorlauf</b><br/>
-              <span id="temp-outgoing" class="temp-value">0</span> °C
+              <span class="temp-value">{{tempOutgoing}}</span> °C
             </div>
             <div class="col-xs-6">
               <b>Rücklauf</b><br/>
-              <span id="temp-return" class="temp-value">0</span> °C
+              <span class="temp-value">{{tempReturn}}</span> °C
             </div>
           </div>  
         </div>
@@ -65,11 +66,11 @@
           <div class="row">
             <div class="col-xs-6">
               <b>Aussentemperatur</b><br/>
-              <span id="temp-outdoors" class="temp-value">0</span> °C
+              <span class="temp-value">{{tempOutdoors}}</span> °C
             </div>
             <div class="col-xs-6">
               <b>Rücklauf Soll</b><br/>
-              <span id="temp-return-should" class="temp-value">0</span> °C
+              <span class="temp-value">{{tempReturnShould}}</span> °C
             </div>
           </div>
         </div>
@@ -78,18 +79,18 @@
       <div class="row">
         <div class="col-sm-3">
           <b>Uhrzeit</b><br/>
-          <span id="time">00:00:00</span><br/>
+          {{time}}<br/>
           <br/>
           <b>Verdichter Stillstand</b><br/>
-          <span id="time-compressor-noop">0 h 0 min 0 sec</span><br/>
+          {{timeCompressorNoop}}<br/>
           <br/>
         </div>
         <div class="col-sm-6">
           <b>T Rücklauf < (T Rücklauf Soll - Hysterese)</b><br/>
-          <span id="time-return-lower">0 h 0 min 0 sec</span><br/>
+          {{timeReturnLower}}<br/>
           <br/>
           <b>T Rücklauf > (T Rücklauf Soll + Hysterese)</b><br/>
-          <span id="time-return-higher">0 h 0 min 0 sec</span><br/>
+          {{timeReturnHigher}}<br/>
           <br/>
         </div>
       </div>

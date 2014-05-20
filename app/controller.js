@@ -1,7 +1,3 @@
-function HeatingDisplayControl($scope) {
-  $scope.requestStatus = "OFF";
-}
-
 var REQUEST_STATUS = 3004;
 
 /**
@@ -37,20 +33,135 @@ var INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER = 74;
 /** @const */
 var INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR = 75;
 
-/**
- * Temperature unit.
- * @const
- */
-var UNIT_TEMPERATURE_CELSIUS = "°C";
+function HeatingDisplayControl($scope) {
+  $scope.host = "waermepumpe";
+  $scope.port = 8888;
 
-var tcpClient;
-var timeoutRunnable;
+  $scope.tcpClient;
+  $scope.timeoutRunnable;
 
-/** Whether a new status should be requested after one was received. */
-var isRequestStatus = false;
+  $scope.time = "00:00:00";
+  $scope.timeCompressorNoop = "0 h 0 min 0 sec";
+  $scope.timeReturnLower = "0 h 0 min 0 sec";
+  $scope.timeReturnHigher = "0 h 0 min 0 sec";
+  $scope.tempOutdoors = 0.0;
+  $scope.tempOutgoing = 0.0;
+  $scope.tempReturn = 0.0;
+  $scope.tempReturnShould = 0.0;
 
-var dataView;
-var statusView;
+  $scope.textStatus = "";
+  $scope.textBtnConnect = "Connect";
+  $scope.textRequestStatus = "OFF";
+
+  $scope.isRequestStatus = true;
+
+  $scope.toggleConnection = function() {
+    if (!$scope.tcpClient || !$scope.tcpClient.isConnected) {
+      // TODO get host and port from settings UI
+      $scope.disconnect();
+      $scope.connect();
+      $scope.textBtnConnect = "Disconnect";
+
+      // start requesting status updates
+      $scope.setStatusUpdatesState(true);
+    } else {
+      $scope.disconnect();
+      $scope.textBtnConnect = "Connect";
+    }
+  }
+
+  $scope.connect = function() {
+    $scope.tcpClient = new TcpClient($scope.host, $scope.port);
+    $scope.tcpClient.connect(function () {
+      $scope.textStatus = "Connected to " + $scope.host + ":" + $scope.port;
+      $scope.tcpClient.addResponseListener(function (data) {
+        if (data[0] != REQUEST_STATUS) {
+          $scope.textStatus = "Invalid response: request code does not match";
+          return;
+        }
+        
+        // time
+        var currentTime = new Date();
+        $scope.time = currentTime.getHours() + ":" + currentTime.getMinutes()
+          + ":" + currentTime.getSeconds();
+        
+        // time values
+        $scope.timeCompressorNoop = getValue(data, INDEX_TIME_VERDICHTER_STAND);
+        $scope.timeReturnLower = getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER);
+        $scope.timeReturnHigher = getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR);
+
+        // temp values
+        $scope.tempOutdoors = getValue(data, INDEX_TEMP_OUTDOORS);
+        $scope.tempOutgoing = getValue(data, INDEX_TEMP_VORLAUF);
+        $scope.tempReturn = getValue(data, INDEX_TEMP_RUECKLAUF);
+        $scope.tempReturnShould = getValue(data, INDEX_TEMP_RUECKLAUF_SOLL);
+
+        if ($scope.isRequestStatus) {
+          $scope.timeoutRunnable = window.setTimeout(function () {
+            $scope.requestStatus();
+          }, 1500);
+        }
+      });
+    });
+  }
+
+  $scope.disconnect = function() {
+    $scope.setStatusUpdatesState(false);
+    if ($scope.tcpClient) {
+      $scope.textStatus = "Disconnected.";
+      $scope.tcpClient.disconnect();
+    }
+  }
+
+  $scope.setStatusUpdatesState = function(isEnabled) {
+    $scope.isRequestStatus = isEnabled;
+    if (isEnabled) {
+      $scope.textRequestStatus = "ON";
+      $scope.requestStatus();
+    } else {
+      window.clearTimeout($scope.timeoutRunnable);
+      $scope.textRequestStatus = "OFF";
+    }
+  }
+
+  $scope.requestStatus = function() {
+    if ($scope.tcpClient) {
+      $scope.tcpClient.sendInteger(REQUEST_STATUS);
+    }
+  }
+
+  $scope.getValue = function(array, index) {
+    switch (index) {
+      case INDEX_TEMP_VORLAUF:
+      case INDEX_TEMP_RUECKLAUF:
+      case INDEX_TEMP_RUECKLAUF_SOLL:
+      case INDEX_TEMP_OUTDOORS:
+        return $scope.getTemperatureValue(array, index);
+      case INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR:
+      case INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER:
+      case INDEX_TIME_VERDICHTER_STAND:
+        return $scope.getTimeValue(array, index);
+    }
+    return "n/a";
+  }
+
+  $scope.getTemperatureValue = function(array, index) {
+    // offset by 3 (exclude request code, status code and length field)
+    return (array[index + 3] / 10);
+  }
+
+  $scope.getTimeValue = function(array, index) {
+    // offset by 3 (exclude request code, status code and length field)
+    var seconds = array[index + 3];
+
+    var hours = (seconds - (seconds % 3600)) / 3600;
+    seconds = seconds - (hours * 3600);
+    var minutes = (seconds - (seconds % 60)) / 60;
+    seconds = seconds % 60;
+    return hours + " h " + minutes + " min " + seconds + " sec";
+  }
+
+}
 
 /**
 /**
@@ -71,149 +182,6 @@ function toggleHelp() {
       e.preventDefault();
     }
   }, false);
-
-  // set default connection
-  // TODO persist settings
-  var host = "waermepumpe";
-  var port = 8888;
-
-  // buttons
-  var connectButton = document.getElementById("btn-connect");
-
-  // status labels
-  var requestStatusLabel = document.getElementById("request-status");
-
-  // data fields
-  var time = document.getElementById("time");
-  var timeCompressorNoop = document.getElementById("time-compressor-noop");
-  var timeReturnLower = document.getElementById("time-return-lower");
-  var timeReturnHigher = document.getElementById("time-return-higher");
-  var tempOutdoors = document.getElementById("temp-outdoors");
-  var tempOutgoing = document.getElementById("temp-outgoing");
-  var tempReturn = document.getElementById("temp-return");
-  var tempReturnShould = document.getElementById("temp-return-should");
-
-  setStatusUpdatesState(false);
-
-  // connect button
-  connectButton.addEventListener("click", function () {
-    if (!tcpClient || !tcpClient.isConnected) {
-      var host = document.getElementById("host").value;
-      var port = parseInt(document.getElementById("port").value, 10);
-      disconnect();
-      connect(host, port);
-      connectButton.textContent = "Disconnect";
-
-      // start requesting status updates
-      setStatusUpdatesState(true);
-    } else {
-      disconnect();
-      connectButton.textContent = "Connect";
-    }
-  });
-
-  /**
-   * Connects to a host and port
-   *
-   * @param {String} host The remote host to connect to
-   * @param {Number} port The port to connect to at the remote host
-   *
-  function connect(host, port) {
-    tcpClient = new TcpClient(host, port);
-    tcpClient.connect(function () {
-      setStatus("Connected to " + host + ":" + port);
-      tcpClient.addResponseListener(function (data) {
-        if (data[0] != REQUEST_STATUS) {
-          setData("Invalid response: request code does not match");
-          return;
-        }
-        
-        // time
-        var currentTime = new Date();
-        time.innerText = currentTime.getHours() + ":" + currentTime.getMinutes() + ":" + currentTime.getSeconds();
-        
-        // time values
-        timeCompressorNoop.innerText = getValue(data, INDEX_TIME_VERDICHTER_STAND);
-        timeReturnLower.innerText = getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER);
-        timeReturnHigher.innerText = getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR);
-
-        // temp values
-        tempOutdoors.innerText = getValue(data, INDEX_TEMP_OUTDOORS);
-        tempOutgoing.innerText = getValue(data, INDEX_TEMP_VORLAUF);
-        tempReturn.innerText = getValue(data, INDEX_TEMP_RUECKLAUF);
-        tempReturnShould.innerText = getValue(data, INDEX_TEMP_RUECKLAUF_SOLL);
-
-        if (isRequestStatus) {
-          timeoutRunnable = window.setTimeout(function () {
-            requestStatus();
-          }, 1500);
-        }
-      });
-    });
-  }
-
-  function getValue(array, index) {
-    switch (index) {
-      case INDEX_TEMP_VORLAUF:
-      case INDEX_TEMP_RUECKLAUF:
-      case INDEX_TEMP_RUECKLAUF_SOLL:
-      case INDEX_TEMP_OUTDOORS:
-        return getTemperatureValue(array, index);
-      case INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR:
-      case INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER:
-      case INDEX_TIME_VERDICHTER_STAND:
-        return getTimeValue(array, index);
-    }
-    return "n/a";
-  }
-
-  function getTemperatureValue(array, index) {
-    // offset by 3 (exclude request code, status code and length field)
-    return (array[index + 3] / 10);
-  }
-
-  function getTimeValue(array, index) {
-    // offset by 3 (exclude request code, status code and length field)
-    var seconds = array[index + 3];
-
-    var hours = (seconds - (seconds % 3600)) / 3600;
-    seconds = seconds - (hours * 3600);
-    var minutes = (seconds - (seconds % 60)) / 60;
-    seconds = seconds % 60;
-    return hours + " h " + minutes + " min " + seconds + " sec";
-  }
-
-  function disconnect() {
-    setStatusUpdatesState(false);
-    if (tcpClient) {
-      setStatus("Disconnected.");
-      tcpClient.disconnect();
-    }
-  }
-
-  function setStatus(statusText) {
-    if (!statusView) {
-      statusView = document.getElementById("status");
-    }
-    statusView.innerHTML = "<p>" + statusText + "</p>";
-  }
-
-  function setStatusUpdatesState(isEnabled) {
-    isRequestStatus = isEnabled;
-    if (isEnabled) {
-      requestStatusLabel.textContent = "ON";
-      requestStatus();
-    } else {
-      window.clearTimeout(timeoutRunnable);
-      requestStatusLabel.textContent = "OFF";
-    }
-  }
-
-  function requestStatus() {
-    if (tcpClient) {
-      tcpClient.sendInteger(REQUEST_STATUS);
-    }
-  }
 
 })();
 */
