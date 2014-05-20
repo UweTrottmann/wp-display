@@ -53,7 +53,7 @@ function HeatingDisplayControl($scope) {
   $scope.textBtnConnect = "Connect";
   $scope.textRequestStatus = "OFF";
 
-  $scope.isRequestStatus = true;
+  $scope.isRequestStatus = false;
 
   $scope.toggleConnection = function() {
     if (!$scope.tcpClient || !$scope.tcpClient.isConnected) {
@@ -61,9 +61,6 @@ function HeatingDisplayControl($scope) {
       $scope.disconnect();
       $scope.connect();
       $scope.textBtnConnect = "Disconnect";
-
-      // start requesting status updates
-      $scope.setStatusUpdatesState(true);
     } else {
       $scope.disconnect();
       $scope.textBtnConnect = "Connect";
@@ -73,7 +70,10 @@ function HeatingDisplayControl($scope) {
   $scope.connect = function() {
     $scope.tcpClient = new TcpClient($scope.host, $scope.port);
     $scope.tcpClient.connect(function () {
+      // connected, display status
       $scope.textStatus = "Connected to " + $scope.host + ":" + $scope.port;
+
+      // add response listener
       $scope.tcpClient.addResponseListener(function (data) {
         if (data[0] != REQUEST_STATUS) {
           $scope.textStatus = "Invalid response: request code does not match";
@@ -96,12 +96,16 @@ function HeatingDisplayControl($scope) {
         $scope.tempReturn = getValue(data, INDEX_TEMP_RUECKLAUF);
         $scope.tempReturnShould = getValue(data, INDEX_TEMP_RUECKLAUF_SOLL);
 
+        // schedule next request?
         if ($scope.isRequestStatus) {
           $scope.timeoutRunnable = window.setTimeout(function () {
             $scope.requestStatus();
           }, 1500);
         }
       });
+
+      // start requesting status updates
+      $scope.setStatusUpdatesState(true);
     });
   }
 
