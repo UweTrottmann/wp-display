@@ -56,6 +56,7 @@ function HeatingDisplayControl($scope) {
   $scope.textRequestStatus = "OFF";
 
   $scope.isRequestStatus = false;
+  $scope.isShowingSettings = false;
 
   $scope.toggleConnection = function() {
     if (!$scope.tcpClient || !$scope.tcpClient.isConnected) {
@@ -170,27 +171,8 @@ function HeatingDisplayControl($scope) {
     return hours + " h " + minutes + " min " + seconds + " sec";
   }
 
+  $scope.toggleSettings = function() {
+    $scope.isShowingSettings = !$scope.isShowingSettings;
+  }
+
 }
-
-/**
-/**
- * Shows and hides the help panel
- *
-function toggleHelp() {
-  document.querySelector(".help").classList.toggle("hidden");
-  document.body.classList.toggle("dim");
-}
-
-(function () {
-
-  // help screen toggle
-  document.body.addEventListener("keydown", function (e) {
-    if (e.keyCode == 27) { // Esc
-      toggleHelp();
-      e.stopPropagation();
-      e.preventDefault();
-    }
-  }, false);
-
-})();
-*/
