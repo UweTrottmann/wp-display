@@ -86,15 +86,15 @@ function HeatingDisplayControl($scope) {
           + ":" + currentTime.getSeconds();
         
         // time values
-        $scope.timeCompressorNoop = getValue(data, INDEX_TIME_VERDICHTER_STAND);
-        $scope.timeReturnLower = getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER);
-        $scope.timeReturnHigher = getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR);
+        $scope.timeCompressorNoop = $scope.getValue(data, INDEX_TIME_VERDICHTER_STAND);
+        $scope.timeReturnLower = $scope.getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER);
+        $scope.timeReturnHigher = $scope.getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR);
 
         // temp values
-        $scope.tempOutdoors = getValue(data, INDEX_TEMP_OUTDOORS);
-        $scope.tempOutgoing = getValue(data, INDEX_TEMP_VORLAUF);
-        $scope.tempReturn = getValue(data, INDEX_TEMP_RUECKLAUF);
-        $scope.tempReturnShould = getValue(data, INDEX_TEMP_RUECKLAUF_SOLL);
+        $scope.tempOutdoors = $scope.getValue(data, INDEX_TEMP_OUTDOORS);
+        $scope.tempOutgoing = $scope.getValue(data, INDEX_TEMP_VORLAUF);
+        $scope.tempReturn = $scope.getValue(data, INDEX_TEMP_RUECKLAUF);
+        $scope.tempReturnShould = $scope.getValue(data, INDEX_TEMP_RUECKLAUF_SOLL);
 
         // schedule next request?
         if ($scope.isRequestStatus) {
