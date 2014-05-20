@@ -1,0 +1,66 @@
+{
+  "appDesc": {
+    "message": "Displays status information provided through the TCP server of alpha innotec's Luxtronik 2.0 heat pump controller.", 
+    "description":"The description of the application, displayed in the web store."
+  },
+  "connect": {
+    "message": "Connect",
+    "description": ""
+  },
+  "disconnect": {
+    "message": "Disconnect",
+    "description": ""
+  },
+  "disconnected": {
+    "message": "Disconnected",
+    "description": ""
+  },
+  "titleSettings": {
+    "message": "Settings",
+    "description": ""
+  },
+  "hostname": {
+    "message": "Hostname/IP",
+    "description": ""
+  },
+  "port": {
+    "message": "Port",
+    "description": ""
+  },
+  "titleAbout": {
+    "message": "What is this?",
+    "description": ""
+  },
+  "tempOutgoing": {
+    "message": "Outgoing",
+    "description": ""
+  },
+  "tempReturn": {
+    "message": "Return",
+    "description": ""
+  },
+  "tempReturnShould": {
+    "message": "Return Should",
+    "description": ""
+  },
+  "tempOutdoors": {
+    "message": "Outdoors",
+    "description": ""
+  },
+  "time": {
+    "message": "Time",
+    "description": ""
+  },
+  "timeCompressorNoop": {
+    "message": "Compressor NoOp",
+    "description": ""
+  },
+  "timeReturnLower": {
+    "message": "T Return < (T Return Should - Hysteresis)",
+    "description": ""
+  },
+  "timeReturnHigher": {
+    "message": "T Return > (T Return Should + Hysteresis)",
+    "description": ""
+  }
+}

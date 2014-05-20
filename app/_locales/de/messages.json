@@ -1,0 +1,66 @@
+{
+  "appDesc": {
+    "message": "Zeigt durch den TCP Server des alpha innotec Luxtronik 2.0 Wärmepumpen-Controllers zur Verfügung gestellte Statusinformationen an.", 
+    "description":"The description of the application, displayed in the web store."
+  },
+  "connect": {
+    "message": "Verbinden",
+    "description": ""
+  },
+  "disconnect": {
+    "message": "Trennen",
+    "description": ""
+  },
+  "disconnected": {
+    "message": "Getrennt",
+    "description": ""
+  },
+  "titleSettings": {
+    "message": "Einstellungen",
+    "description": ""
+  },
+  "hostname": {
+    "message": "Hostname/IP",
+    "description": ""
+  },
+  "port": {
+    "message": "Port",
+    "description": ""
+  },
+  "titleAbout": {
+    "message": "Was macht diese App?",
+    "description": ""
+  },
+  "tempOutgoing": {
+    "message": "Vorlauf",
+    "description": ""
+  },
+  "tempReturn": {
+    "message": "Rücklauf",
+    "description": ""
+  },
+  "tempReturnShould": {
+    "message": "Rücklauf Soll",
+    "description": ""
+  },
+  "tempOutdoors": {
+    "message": "Außentemperatur",
+    "description": ""
+  },
+  "time": {
+    "message": "Uhrzeit",
+    "description": ""
+  },
+  "timeCompressorNoop": {
+    "message": "Verdichter Stillstand",
+    "description": ""
+  },
+  "timeReturnLower": {
+    "message": "T Rücklauf < (T Rücklauf Soll - Hysterese)",
+    "description": ""
+  },
+  "timeReturnHigher": {
+    "message": "T Rücklauf > (T Rücklauf Soll + Hysterese)",
+    "description": ""
+  }
+}

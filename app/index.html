@@ -37,15 +37,15 @@
 
       <div id="settings" ng-show="isShowingSettings">
         <div>
-          <h4>Settings</h4>
-          <label for="host">Hostname:</label>
+          <h4>{{strTitleSettings}}</h4>
+          <label for="host">{{strLabelHost}}:</label>
           <input type="text" ng-model="host">
-          <label for="port">Port:</label>
+          <label for="port">{{strLabelPort}}:</label>
           <input type="number" id="port" ng-model="port">
         </div>
         <div>
-          <h4>What is this?</h4>
-          <p>Displays status information provided through the TCP server of alpha innotec's Luxtronik 2.0 heat pump controller.</p>
+          <h4>{{strTitleAbout}}</h4>
+          <p>{{strAppDescription}}</p>
         </div>
       </div>
 
@@ -56,11 +56,11 @@
         <div class="col-sm-6">
           <div class="row">
             <div class="col-xs-6">
-              <b>Vorlauf</b><br/>
+              <b>{{strLabelTempOutgoing}}</b><br/>
               <span class="temp-value">{{tempOutgoing}}</span> °C
             </div>
             <div class="col-xs-6">
-              <b>Rücklauf</b><br/>
+              <b>{{strLabelTempReturn}}</b><br/>
               <span class="temp-value">{{tempReturn}}</span> °C
             </div>
           </div>  
@@ -68,11 +68,11 @@
         <div class="col-sm-6">
           <div class="row">
             <div class="col-xs-6">
-              <b>Aussentemperatur</b><br/>
+              <b>{{strLabelTempOutdoors}}</b><br/>
               <span class="temp-value">{{tempOutdoors}}</span> °C
             </div>
             <div class="col-xs-6">
-              <b>Rücklauf Soll</b><br/>
+              <b>{{strLabelTempReturnShould}}</b><br/>
               <span class="temp-value">{{tempReturnShould}}</span> °C
             </div>
           </div>
@@ -81,18 +81,18 @@
 
       <div class="row">
         <div class="col-sm-3">
-          <b>Uhrzeit</b><br/>
+          <b>{{strLabelTime}}</b><br/>
           {{time}}<br/>
           <br/>
-          <b>Verdichter Stillstand</b><br/>
+          <b>{{strLabelTimeCompressorNoop}}</b><br/>
           {{timeCompressorNoop}}<br/>
           <br/>
         </div>
         <div class="col-sm-6">
-          <b>T Rücklauf < (T Rücklauf Soll - Hysterese)</b><br/>
+          <b>{{strLabelTimeReturnLower}}</b><br/>
           {{timeReturnLower}}<br/>
           <br/>
-          <b>T Rücklauf > (T Rücklauf Soll + Hysterese)</b><br/>
+          <b>{{strLabelTimeReturnHigher}}</b><br/>
           {{timeReturnHigher}}<br/>
           <br/>
         </div>
