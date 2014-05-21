@@ -2,7 +2,7 @@
   "name": "WP Display",
   "description": "__MSG_appDesc__",
   "default_locale": "en",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "manifest_version": 2,
   "minimum_chrome_version": "33",
   "icons": {
