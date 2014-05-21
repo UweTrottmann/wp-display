@@ -44,7 +44,7 @@ function HeatingDisplayControl($scope) {
   $scope.strLabelTempReturn = chrome.i18n.getMessage("tempReturn");
   $scope.strLabelTempReturnShould = chrome.i18n.getMessage("tempReturnShould");
   $scope.strLabelTempOutdoors = chrome.i18n.getMessage("tempOutdoors");
-  $scope.strLabelTime = chrome.i18n.getMessage("time");
+  $scope.strLabelTimeReceived = chrome.i18n.getMessage("timeReceived");
   $scope.strLabelTimeCompressorNoop = chrome.i18n.getMessage("timeCompressorNoop");
   $scope.strLabelTimeReturnLower = chrome.i18n.getMessage("timeReturnLower");
   $scope.strLabelTimeReturnHigher = chrome.i18n.getMessage("timeReturnHigher");
@@ -57,7 +57,7 @@ function HeatingDisplayControl($scope) {
 
   $scope.refreshIntervalMs = 2000;
 
-  $scope.time = "00:00:00";
+  $scope.timeReceived = "00:00:00";
   $scope.timeCompressorNoop = "0 h 0 min 0 sec";
   $scope.timeReturnLower = "0 h 0 min 0 sec";
   $scope.timeReturnHigher = "0 h 0 min 0 sec";
@@ -99,7 +99,7 @@ function HeatingDisplayControl($scope) {
         }
         
         // current time
-        $scope.time = moment().format('H:mm:ss');
+        $scope.timeReceived = moment().format('H:mm:ss');
         
         // time values
         $scope.timeCompressorNoop = $scope.getValue(data, INDEX_TIME_VERDICHTER_STAND);

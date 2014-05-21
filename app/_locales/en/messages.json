@@ -51,8 +51,8 @@
     "message": "Outdoors",
     "description": ""
   },
-  "time": {
-    "message": "Time",
+  "timeReceived": {
+    "message": "Received",
     "description": ""
   },
   "timeCompressorNoop": {

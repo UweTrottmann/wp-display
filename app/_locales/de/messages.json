@@ -51,8 +51,8 @@
     "message": "Außentemperatur",
     "description": ""
   },
-  "time": {
-    "message": "Uhrzeit",
+  "timeReceived": {
+    "message": "Empfangen",
     "description": ""
   },
   "timeCompressorNoop": {
