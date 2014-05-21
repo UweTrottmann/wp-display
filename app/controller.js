@@ -99,7 +99,7 @@ function HeatingDisplayControl($scope) {
         }
         
         // current time
-        $scope.timeReceived = moment().format('H:mm:ss');
+        $scope.timeReceived = moment().lang(chrome.i18n.getMessage("@@ui_locale")).format("L HH:mm:ss");
         
         // time values
         $scope.timeCompressorNoop = $scope.getValue(data, INDEX_TIME_VERDICHTER_STAND);
