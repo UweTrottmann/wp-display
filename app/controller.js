@@ -73,6 +73,31 @@ function HeatingDisplayControl($scope) {
   $scope.isRequestStatus = false;
   $scope.isShowingSettings = false;
 
+    // Notice that chrome.storage.sync.get is asynchronous
+  chrome.storage.sync.get('connectionSettings', function(value) {
+    // The $apply is only necessary to execute the function inside Angular scope
+    $scope.$apply(function() {
+      $scope.loadSettings(value);
+    });
+  });
+
+  // If there is saved data in storage, use it.
+  $scope.loadSettings = function(value) {
+    if (value && value.connectionSettings) {
+      if (value.connectionSettings.host) {
+        $scope.host = value.connectionSettings.host;
+      }
+      if (value.connectionSettings.port) {
+        $scope.port = value.connectionSettings.port;
+      }
+    }
+  } 
+
+  $scope.saveSettings = function() {
+    var settings = { host: $scope.host, port: $scope.port };
+    chrome.storage.sync.set({'connectionSettings': settings});
+  };
+
   $scope.toggleConnection = function() {
     if (!$scope.tcpClient || !$scope.tcpClient.isConnected) {
       // TODO get host and port from settings UI

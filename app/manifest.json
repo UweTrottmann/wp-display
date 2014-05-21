@@ -16,6 +16,7 @@
   "permissions": [
     {"socket": [
       "tcp-connect:*:*"
-    ]}
+    ]},
+    "storage"
   ]
 }
