@@ -51,6 +51,14 @@
     "message": "Outdoors",
     "description": ""
   },
+  "tempWater": {
+    "message": "Water",
+    "description": ""
+  },
+  "tempWaterShould": {
+    "message": "Water Should",
+    "description": ""
+  },
   "timeReceived": {
     "message": "Received",
     "description": ""

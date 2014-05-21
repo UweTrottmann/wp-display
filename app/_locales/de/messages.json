@@ -51,6 +51,14 @@
     "message": "Außentemperatur",
     "description": ""
   },
+  "tempWater": {
+    "message": "Brauchwasser",
+    "description": ""
+  },
+  "tempWaterShould": {
+    "message": "Brauchwasser Soll",
+    "description": ""
+  },
   "timeReceived": {
     "message": "Empfangen",
     "description": ""

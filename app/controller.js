@@ -5,33 +5,45 @@ var REQUEST_STATUS = 3004;
  * @const
  * @type {number}
  */
-var INDEX_TEMP_VORLAUF = 10;
+var INDEX_TEMP_OUTGOING = 10;
 /**
  * Temperatur Rücklauf, Faktor 10, Celsius.
  * @const
  * @type {number}
  */
-var INDEX_TEMP_RUECKLAUF = 11;
+var INDEX_TEMP_RETURN = 11;
 /**
  * Temperatur Rücklauf Soll, Faktor 10, Celsius.
  * @const
  * @type {number}
  */
-var INDEX_TEMP_RUECKLAUF_SOLL = 12;
+var INDEX_TEMP_RETURN_SHOULD = 12;
 /**
  * Aussentemperatur, Faktor 10, Celsius.
  * @const
  * @type {number}
  */
 var INDEX_TEMP_OUTDOORS = 15;
+/**
+ * Temperature Water, Factor 10, Celsius.
+ * @const
+ * @type {number}
+ */
+var INDEX_TEMP_WATER = 17;
+/**
+ * Temperature Water Should, Factor 10, Celsius.
+ * @const
+ * @type {number}
+ */
+var INDEX_TEMP_WATER_SHOULD = 18;
 
 /** @const */
-var INDEX_TIME_VERDICHTER_STAND = 73;
+var INDEX_TIME_COMPRESSOR_NOOP = 73;
 
 /** @const */
-var INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER = 74;
+var INDEX_TIME_RETURN_LOWER = 74;
 /** @const */
-var INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR = 75;
+var INDEX_TIME_RETURN_HIGHER = 75;
 
 function HeatingDisplayControl($scope) {
   // localized strings
@@ -44,6 +56,8 @@ function HeatingDisplayControl($scope) {
   $scope.strLabelTempReturn = chrome.i18n.getMessage("tempReturn");
   $scope.strLabelTempReturnShould = chrome.i18n.getMessage("tempReturnShould");
   $scope.strLabelTempOutdoors = chrome.i18n.getMessage("tempOutdoors");
+  $scope.strLabelTempWater = chrome.i18n.getMessage("tempWater");
+  $scope.strLabelTempWaterShould = chrome.i18n.getMessage("tempWaterShould");
   $scope.strLabelTimeReceived = chrome.i18n.getMessage("timeReceived");
   $scope.strLabelTimeCompressorNoop = chrome.i18n.getMessage("timeCompressorNoop");
   $scope.strLabelTimeReturnLower = chrome.i18n.getMessage("timeReturnLower");
@@ -65,6 +79,8 @@ function HeatingDisplayControl($scope) {
   $scope.tempOutgoing = 0.0;
   $scope.tempReturn = 0.0;
   $scope.tempReturnShould = 0.0;
+  $scope.tempWater = 0.0;
+  $scope.tempWaterShould = 0.0;
 
   $scope.textStatus = chrome.i18n.getMessage("disconnected");
   $scope.textBtnConnect = chrome.i18n.getMessage("connect");
@@ -127,15 +143,17 @@ function HeatingDisplayControl($scope) {
         $scope.timeReceived = moment().lang(chrome.i18n.getMessage("@@ui_locale")).format("L HH:mm:ss");
         
         // time values
-        $scope.timeCompressorNoop = $scope.getValue(data, INDEX_TIME_VERDICHTER_STAND);
-        $scope.timeReturnLower = $scope.getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER);
-        $scope.timeReturnHigher = $scope.getValue(data, INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR);
+        $scope.timeCompressorNoop = $scope.getValue(data, INDEX_TIME_COMPRESSOR_NOOP);
+        $scope.timeReturnLower = $scope.getValue(data, INDEX_TIME_RETURN_LOWER);
+        $scope.timeReturnHigher = $scope.getValue(data, INDEX_TIME_RETURN_HIGHER);
 
         // temp values
         $scope.tempOutdoors = $scope.getValue(data, INDEX_TEMP_OUTDOORS);
-        $scope.tempOutgoing = $scope.getValue(data, INDEX_TEMP_VORLAUF);
-        $scope.tempReturn = $scope.getValue(data, INDEX_TEMP_RUECKLAUF);
-        $scope.tempReturnShould = $scope.getValue(data, INDEX_TEMP_RUECKLAUF_SOLL);
+        $scope.tempOutgoing = $scope.getValue(data, INDEX_TEMP_OUTGOING);
+        $scope.tempReturn = $scope.getValue(data, INDEX_TEMP_RETURN);
+        $scope.tempReturnShould = $scope.getValue(data, INDEX_TEMP_RETURN_SHOULD);
+        $scope.tempWater = $scope.getValue(data, INDEX_TEMP_WATER);
+        $scope.tempWaterShould = $scope.getValue(data, INDEX_TEMP_WATER_SHOULD);
 
         // force angular to update watched values
         $scope.$apply();
@@ -180,14 +198,16 @@ function HeatingDisplayControl($scope) {
 
   $scope.getValue = function(array, index) {
     switch (index) {
-      case INDEX_TEMP_VORLAUF:
-      case INDEX_TEMP_RUECKLAUF:
-      case INDEX_TEMP_RUECKLAUF_SOLL:
+      case INDEX_TEMP_OUTGOING:
+      case INDEX_TEMP_RETURN:
+      case INDEX_TEMP_RETURN_SHOULD:
       case INDEX_TEMP_OUTDOORS:
+      case INDEX_TEMP_WATER:
+      case INDEX_TEMP_WATER_SHOULD:
         return $scope.getTemperatureValue(array, index);
-      case INDEX_TIME_HEIZUNG_RUECKLAUF_MEHR:
-      case INDEX_TIME_HEIZUNG_RUECKLAUF_WENIGER:
-      case INDEX_TIME_VERDICHTER_STAND:
+      case INDEX_TIME_RETURN_HIGHER:
+      case INDEX_TIME_RETURN_LOWER:
+      case INDEX_TIME_COMPRESSOR_NOOP:
         return $scope.getTimeValue(array, index);
     }
     return "n/a";
