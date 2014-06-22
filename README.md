@@ -1,6 +1,6 @@
 # WP Display
 
-[Download from Chrome Web Store](https://chrome.google.com/webstore/detail/wp-display)
+[Download from Chrome Web Store](https://chrome.google.com/webstore/detail/wp-display/hlbeahfpeafgkdalgoabfekipelccehp)
 
 ![Screenshot](/screenshot_1280_800.png)
 
