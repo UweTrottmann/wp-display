@@ -1,5 +1,7 @@
 # WP Display
 
+[Download from Chrome Web Store](https://chrome.google.com/webstore/detail/wp-display)
+
 ![Screenshot](/screenshot_1280_800.png)
 
 Displays status information provided through the TCP server of alpha innotec's Luxtronik 2.0 heat pump controller.
