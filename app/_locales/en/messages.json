@@ -59,13 +59,29 @@
     "message": "Water Should",
     "description": ""
   },
+  "tempSourceIn": {
+    "message": "Heat Source In",
+    "description": ""
+  },
+  "tempSourceOut": {
+    "message": "Heat Source Out",
+    "description": ""
+  },
   "timeReceived": {
-    "message": "Received",
+    "message": "Last update",
     "description": ""
   },
   "timeCompressorNoop": {
-    "message": "Compressor NoOp",
+    "message": "Compressor inactive",
     "description": ""
+  },
+  "timePumpActive": {
+    "message": "Heat pump active",
+    "description": "Time the heat pump is running."
+  },
+  "timeRest": {
+    "message": "Rest time",
+    "description": "Time the system needs to rest to avoid wear before restarting."
   },
   "timeReturnLower": {
     "message": "T Return < (T Return Should - Hysteresis)",

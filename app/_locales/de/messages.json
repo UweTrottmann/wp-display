@@ -59,13 +59,29 @@
     "message": "Brauchwasser Soll",
     "description": ""
   },
+  "tempSourceIn": {
+    "message": "Wärmequelle Ein",
+    "description": ""
+  },
+  "tempSourceOut": {
+    "message": "Wärmequelle Aus",
+    "description": ""
+  },
   "timeReceived": {
-    "message": "Empfangen",
+    "message": "Letzte Aktualisierung",
     "description": ""
   },
   "timeCompressorNoop": {
     "message": "Verdichter Stillstand",
     "description": ""
+  },
+  "timePumpActive": {
+    "message": "Wärmepumpe aktiv",
+    "description": "Time the heat pump is running."
+  },
+  "timeRest": {
+    "message": "Ruhezeit",
+    "description": "Time the system needs to rest to avoid wear before restarting."
   },
   "timeReturnLower": {
     "message": "T Rücklauf < (T Rücklauf Soll - Hysterese)",
