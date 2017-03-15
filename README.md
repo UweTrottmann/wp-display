@@ -1,3 +1,5 @@
+ℹ️️ **Note: I only continue to develop [the Android version](https://github.com/UweTrottmann/wp-display-android) since Google has announced to remove Chrome App support on Windows.**
+
 # WP Display
 
 [Download from Chrome Web Store](https://chrome.google.com/webstore/detail/wp-display/hlbeahfpeafgkdalgoabfekipelccehp)
